@@ -4,6 +4,10 @@ var bcrypt = require('bcrypt');
 const session = require('express-session');
 
 const profile = require("./routes/api/profile");
+const post = require("./routes/api/post");
+const group = require("./routes/api/group");
+
+
 //const register  = require('./routes/api/register');
 const config    = require('./routes/api/config');
 
@@ -14,6 +18,9 @@ const app = express();
 //session initialization
 app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
 
+// session variable
+var sess;
+
 
 // Body Parser Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,6 +30,10 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => res.send("Hello World"));
 
 app.use("/api/profile", profile);
+app.use("/api/post", post);
+app.use("/api/group", group);
+
+
 //app.use('/api/register', register)
 app.use('/api/config', config);
 

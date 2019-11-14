@@ -10,7 +10,7 @@ const router = express.Router();
 var salt = bcrypt.genSaltSync(10);
 
 // session variable
-var sess;
+//var sess;
 
 
 
@@ -92,8 +92,9 @@ router.post('/login',(req,res)=> {
             if(results.length > 0){
             if(bcrypt.compareSync(password,results[0].password)){
               sess = req.session;
-              sess.email = user_id;
-              console.log("Session Created !");
+              sess.user_id = user_id;
+
+              console.log("Session",sess);
              res.send({
             "code":200,
             "status":"login sucessfull"
