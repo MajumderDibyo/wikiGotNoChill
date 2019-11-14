@@ -2,11 +2,17 @@
 const mysql = require("mysql");
 const express = require("express");
 const bcrypt = require('bcrypt');
+
 //const connection = require('./config');
 const router = express.Router();
 
 // bcrypt salt
 var salt = bcrypt.genSaltSync(10);
+
+// session variable
+var sess;
+
+
 
 var connection = mysql.createConnection({
   host : 'localhost',
@@ -85,6 +91,9 @@ router.post('/login',(req,res)=> {
         else{
             if(results.length > 0){
             if(bcrypt.compareSync(password,results[0].password)){
+              sess = req.session;
+              sess.email = user_id;
+              console.log("Session Created !");
              res.send({
             "code":200,
             "status":"login sucessfull"

@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 var bcrypt = require('bcrypt');
+const session = require('express-session');
 
 const profile = require("./routes/api/profile");
 //const register  = require('./routes/api/register');
@@ -9,6 +10,10 @@ const config    = require('./routes/api/config');
 
 // Initialization of express
 const app = express();
+
+//session initialization
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+
 
 // Body Parser Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
