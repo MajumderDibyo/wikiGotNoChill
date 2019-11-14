@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/dibyo007dev/wikiGotNoChill#readme",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "concurrently": "^5.0.0",

@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+var bcrypt = require('bcrypt');
 
 const profile = require("./routes/api/profile");
 //const register  = require('./routes/api/register');

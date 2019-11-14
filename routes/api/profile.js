@@ -1,8 +1,12 @@
 // WIll have things like bio, location, and other descriptions
 const mysql = require("mysql");
 const express = require("express");
+const bcrypt = require('bcrypt');
 //const connection = require('./config');
 const router = express.Router();
+
+// bcrypt salt
+var salt = bcrypt.genSaltSync(10);
 
 var connection = mysql.createConnection({
   host : 'localhost',
@@ -30,10 +34,17 @@ router.get("/test", (req, res) => {
   });
 });
 
+
+// @route   POST api/profile/
+// @desc    Registration Page
+// @access  Public
+
+
 router.post("/",(req,res) => {
+  var pass = bcrypt.hashSync(req.body.password, salt);
   var users = {
     "user_id" : req.body.user_id,
-    "password" : req.body.password,
+    "password" : pass,
     "name":req.body.name,
     "dob":req.body.dob,
     "avator":req.body.avator,
@@ -55,6 +66,45 @@ if (error) {
      });
  }
  });
+})
+
+// @route   POST api/profile/login
+// @desc    LOgin Page
+// @access  Public
+
+router.post('/login',(req,res)=> {
+  var user_id = req.body.user_id;
+    var password = req.body.password;
+    connection.query("SELECT user_id, password from users where user_id = ?",[user_id], function(error, results, fields){
+        if(error){
+            res.send({
+                "code" : 400,
+                "status": "error occoured"
+                });
+        }
+        else{
+            if(results.length > 0){
+            if(bcrypt.compareSync(password,results[0].password)){
+             res.send({
+            "code":200,
+            "status":"login sucessfull"
+           });
+           }
+         else{
+         res.send({
+              "code":204,
+             "status":"userid and password does not match"
+            });
+         }
+     }
+    else{
+      res.send({
+        "code":204,
+        "status":" does not exits"
+          });
+    }
+  }
+  });
 })
 
 module.exports = router;
