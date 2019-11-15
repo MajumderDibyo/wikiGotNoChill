@@ -207,8 +207,8 @@ router.post("/fetchPosts/:gid", (req, res) =>{
 router.post("/fetchGroups", (req, res) =>{
   var sess = req.session;
   var user_id = sess.user_id;
-  console.log(user_id);
-  var objs = [];
+  //console.log(user_id);
+  let objs = [];
   //objs.push({get: 1, set:2});
   connection.query("SELECT group_id from users_in_group where user_id = ?",[user_id], function(error, results, fields){
     if(error){
@@ -241,8 +241,8 @@ router.post("/fetchGroups", (req, res) =>{
           }
       });
     }
-      console.log(objs);
-      res.end(JSON.stringify(objs));
+      //console.log(objs);
+      res.end(objs);
     }});
 });
 router.post("/groupSuggestions", (req, res) =>{

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { browserHistory } from "react-router";
-import { Alert,Card } from "react-bootstrap";
+//import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+//import { browserHistory } from "react-router";
+import { Card } from "react-bootstrap";
 import Login from "./Auth/Login";
 
 class HomePage extends Component {
