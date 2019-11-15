@@ -51,6 +51,8 @@ router.post("/join/:gid", (req, res) => {
   var sess = req.session;
   var user_id = sess.user_id;
   var group_id = req.params.gid;
+
+  console.log("Sess", user_id);
   connection.query("INSERT INTO users_in_group(group_id, user_id) values(?,?)",[group_id, user_id], function(error, results, fields){
     if(error){
       console.log(("error occoured", error));
@@ -75,6 +77,7 @@ router.post("/post/:gid", (req, res) =>{
   var group_id = req.params.gid;
   var content = req.body.content;
   var user_id = sess.user_id;
+  console.log(sess);
   connection.query("INSERT INTO posts(post_content, likes_count) values(?, 0)",[content], function(error, results, fields){
     if (error) {
             console.log("error ocurred",error);
@@ -94,7 +97,8 @@ router.post("/post/:gid", (req, res) =>{
              }
              else {
                var post_id = results[0].post_id;
-               connection.query("INSERT INTO group_posts(group_id, post_id, user_id) values (?,?,?)",[group_id, post_id, sess.user_id], function(error, results, fields){
+               //console.log(sess.user_id);
+               connection.query("INSERT INTO group_posts(group_id, post_id, user_id) values (?,?,?)",[group_id, post_id, user_id], function(error, results, fields){
                  if(error){
                          console.log("error ocurred",error);
                             res.send({
@@ -148,7 +152,7 @@ router.post("/like/:post_id", (req, res) =>{
 });
 
 
-router.post("/fetchFriends/:gid", (req, res) =>{
+router.post("/fetchUsers/:gid", (req, res) =>{
   var group_id = req.params.gid;
   connection.query("SELECT user_id from users_in_group where group_id = ?", [group_id], function(error, results, fields){
     if(error){
@@ -201,8 +205,11 @@ router.post("/fetchPosts/:gid", (req, res) =>{
   });
 });
 router.post("/fetchGroups", (req, res) =>{
+  var sess = req.session;
   var user_id = sess.user_id;
-  objs = [];
+  console.log(user_id);
+  var objs = [];
+  //objs.push({get: 1, set:2});
   connection.query("SELECT group_id from users_in_group where user_id = ?",[user_id], function(error, results, fields){
     if(error){
       console.log("error occoured", error);
@@ -212,8 +219,12 @@ router.post("/fetchGroups", (req, res) =>{
       });
     }
     else {
+      //var objs = [];
+
       for(var i = 0; i < results.length; i++){
         var group_id = results[i].group_id;
+        //console.log("test");
+        //console.log(group_id);
         connection.query("SELECT group_name from group_name where group_id = ?",[group_id], function(error, result, fields){
           if(error){
             console.log("error occoured", error);
@@ -223,10 +234,14 @@ router.post("/fetchGroups", (req, res) =>{
             });
           }
           else{
-            objs.push({groupid: group_id, groupname : result[0].group_name});
+            //console.log("grp_id", group_id);
+            //console.log("grp_name",result[0].group_name);
+            objs.push({userid: group_id, group_name: result[0].group_name});
+            console.log(objs[i]);
           }
       });
     }
+      console.log(objs);
       res.end(JSON.stringify(objs));
     }});
 });
